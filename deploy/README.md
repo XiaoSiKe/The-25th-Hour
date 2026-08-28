@@ -2,6 +2,14 @@
 
 这是本项目的中文运维入口。游戏代码和素材仍使用原有路径，本次整理不改变线上部署方式。
 
+## GitHub 账号与发布连接
+
+当前公开仓库为 `https://github.com/XiaoSiKe/The-25th-Hour`，默认分支为 `main`。本机 Git 提交身份和 `gh auth status` 的活动账号都应为 `XiaoSiKe`；GitHub 凭据由 CLI 管理，不写入环境文件。
+
+2026-08-28 的账号迁移以当时完整代码建立了新提交起点。迁移前可用的 Git 数据保存在本机项目外的迁移备份中，没有作为完整历史推送到新仓库。私有配置、SSH 和 Wrangler 登录保持原位。
+
+更换仓库账号时，必须同时更新本地 `origin`、`deploy/aliyun-flow.yml` 的源码地址、云效保存的 YAML 和新仓库的 push webhook。当前发布方式仍为 GitHub webhook 触发原云效流水线，由流水线中的分支保护只允许 `main` 发布；不要把真实 webhook 地址提交到 Git。
+
 ## 先看哪一份文件
 
 | 目的 | 入口 | 是否可以提交 Git |
