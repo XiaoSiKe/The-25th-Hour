@@ -1,0 +1,77 @@
+name: 25thgame-aliyun-ecs
+stages:
+  deploy_stage:
+    name: deploy
+    jobs:
+      deploy_job:
+        name: build and deploy arch.25thgame.vip
+        component: VMDeploy
+        with:
+          downloadArtifact: false
+          useEncode: false
+          machineGroup: cTOK5j9AnLALVVHB
+          artifactDownloadPath: /tmp/25thgame-flow/no-artifact.tgz
+          executeUser: root
+          run: |
+            set -eu
+
+            # Only main pushes (or manual runs without a ref) can deploy production.
+            if [ "${ref:-refs/heads/main}" != "refs/heads/main" ]; then
+              echo "Skip production deployment for non-main ref: $ref"
+              exit 0
+            fi
+
+            export PATH="/opt/node-v24.16.0-linux-x64/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
+            FLOW_BASE="/tmp/25thgame-flow"
+            mkdir -p "$FLOW_BASE"
+            if command -v flock >/dev/null 2>&1; then
+              exec 9>"$FLOW_BASE/deploy.lock"
+              flock -n 9 || {
+                echo "Another deploy is already running; skip this trigger." >&2
+                exit 1
+              }
+            fi
+
+            export npm_config_audit=false
+            export npm_config_fund=false
+            export NODE_OPTIONS="--max-old-space-size=1024 ${NODE_OPTIONS:-}"
+            RUN_ID="${ENGINE_PIPELINE_INST_ID:-${BUILD_NUMBER:-manual}}"
+            WORK_ROOT="$FLOW_BASE/$RUN_ID"
+            REPO_DIR="$WORK_ROOT/repo"
+            cleanup() {
+              rm -rf "$WORK_ROOT"
+            }
+            trap cleanup EXIT
+
+            rm -rf "$REPO_DIR"
+            mkdir -p "$WORK_ROOT"
+
+            fetch_source_archive() {
+              REPOSITORY_API="https://api.github.com/repos/XiaoSiKe/The-25th-Hour"
+              curl --fail --silent --show-error --retry 2 --retry-all-errors \
+                --connect-timeout 8 --max-time 15 --retry-max-time 20 \
+                --proto '=https' -H 'Accept: application/vnd.github+json' \
+                -H 'Cache-Control: no-cache' \
+                "$REPOSITORY_API/commits/main" -o "$WORK_ROOT/source-commit.json"
+              SOURCE_COMMIT="$(node -e 'const fs=require("node:fs"); const data=JSON.parse(fs.readFileSync(process.argv[1],"utf8")); if (!/^[0-9a-f]{40}$/.test(data.sha || "")) throw new Error("GitHub did not return a valid main commit"); process.stdout.write(data.sha);' "$WORK_ROOT/source-commit.json")"
+              echo "Fetching GitHub main commit $SOURCE_COMMIT"
+              curl --fail --silent --show-error --location --retry 2 --retry-all-errors \
+                --connect-timeout 8 --max-time 60 --retry-max-time 60 \
+                --proto '=https' --proto-redir '=https' \
+                "$REPOSITORY_API/tarball/$SOURCE_COMMIT" -o "$WORK_ROOT/source.tar.gz"
+              mkdir -p "$REPO_DIR"
+              tar -xzf "$WORK_ROOT/source.tar.gz" --strip-components=1 -C "$REPO_DIR"
+              test -f "$REPO_DIR/package.json"
+              test -f "$REPO_DIR/package-lock.json"
+              test -f "$REPO_DIR/deploy/aliyun-flow-deploy.sh"
+              COMMIT_ID="$(printf '%s' "$SOURCE_COMMIT" | cut -c1-12)"
+            }
+
+            fetch_source_archive
+            cd "$REPO_DIR"
+            export COMMIT_ID
+
+            timeout 600s npm ci --prefer-offline --no-audit --no-fund
+            timeout 600s npm run build:aliyun
+
+            bash deploy/aliyun-flow-deploy.sh "$REPO_DIR"

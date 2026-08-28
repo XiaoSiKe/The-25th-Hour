@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>第二十五小时</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='8'%20fill='%23070707'/%3E%3Cpath%20d='M32%2010a22%2022%200%201%200%200%2044%2022%2022%200%200%200%200-44Zm0%208v15l10%207'%20fill='none'%20stroke='%23f4d35e'%20stroke-width='5'%20stroke-linecap='round'/%3E%3C/svg%3E" />
+    <link rel="dns-prefetch" href="https://assets-apac.25thgame.vip" />
+    <link rel="dns-prefetch" href="https://assets-cn.25thgame.vip" />
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+    <link rel="preconnect" href="https://assets-apac.25thgame.vip" crossorigin />
+    <link rel="preconnect" href="https://assets-cn.25thgame.vip" crossorigin />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="stylesheet" href="./stage.css" />
+    <style>
+      :root {
+        --stage-width: 100vw;
+        --stage-height: 100vh;
+        --stage-scale: 1;
+        --stage-left: 0px;
+        --stage-top: 0px;
+        color-scheme: dark;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: #0d1117;
+      }
+
+      .stage-root {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+      }
+
+      .stage-frame {
+        position: absolute;
+        left: var(--stage-left);
+        top: var(--stage-top);
+        width: var(--stage-width);
+        height: var(--stage-height);
+        display: block;
+        border: 0;
+        background: #000;
+        transform: scale(var(--stage-scale));
+        transform-origin: top left;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stage-root" data-stage-root>
+      <iframe
+        class="stage-frame"
+        data-stage-frame
+        data-stage-src="./game.html"
+        title="第二十五小时"
+        allow="autoplay; fullscreen; display-capture"
+      ></iframe>
+    </div>
+    <script type="module" src="./stage.mjs"></script>
+  </body>
+</html>

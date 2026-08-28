@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# macOS metadata
+.DS_Store
+
+# ReCode local database
+.recode
+
+# Local web server logs
+web-app-server*.log
+
+# Local env and deployment output
+.env*
+!/.env.example
+/deploy/*.local.env
+.aliyun-output/
+.wrangler/
+.tmp/
+
+# Local high-resolution render exports
+hyperframes/ending-memory/renders/ending-memory-high-2500x1450.mp4

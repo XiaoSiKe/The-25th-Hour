@@ -1,0 +1,22 @@
+{
+  "rules": [
+    {
+      "allowed": {
+        "origins": [
+          "https://arch.25thgame.vip",
+          "http://localhost:4173",
+          "http://localhost:4174"
+        ],
+        "methods": ["GET", "HEAD"],
+        "headers": ["Range", "Content-Type"]
+      },
+      "exposeHeaders": [
+        "Accept-Ranges",
+        "Content-Length",
+        "Content-Range",
+        "Content-Type"
+      ],
+      "maxAgeSeconds": 86400
+    }
+  ]
+}

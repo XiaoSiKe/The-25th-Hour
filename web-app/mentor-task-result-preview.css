@@ -1,0 +1,127 @@
+html,
+body {
+  min-width: 100%;
+  min-height: 100%;
+  margin: 0;
+  background: #000;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  overflow: auto;
+}
+
+.preview-root {
+  min-height: 100vh;
+  background: #000;
+}
+
+.preview-root.is-single-preview {
+  width: 1710px;
+  height: 991px;
+  min-height: 991px;
+  overflow: hidden;
+}
+
+.preview-fallback {
+  display: grid;
+  align-content: center;
+  gap: 18px;
+  width: 1710px;
+  min-height: 991px;
+  padding: 96px;
+  background: #000;
+  color: var(--ink);
+  font-family: var(--font-pixel);
+}
+
+.preview-fallback h1 {
+  margin: 0;
+  font-size: 64px;
+  line-height: 1.1;
+}
+
+.preview-fallback p,
+.preview-fallback pre {
+  max-width: 980px;
+  margin: 0;
+  color: var(--muted);
+  font: inherit;
+  font-size: 28px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.preview-nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  width: 1710px;
+  min-height: 68px;
+  padding: 12px 28px;
+  background: #000;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--ink);
+  font-family: var(--font-pixel);
+}
+
+.preview-nav strong {
+  font-size: 24px;
+}
+
+.preview-nav span {
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.preview-nav div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.preview-nav-group {
+  color: var(--muted);
+  font-size: 14px;
+  padding-inline: 8px 2px;
+}
+
+.preview-nav a {
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 14px;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--panel-soft);
+}
+
+.preview-pages {
+  display: grid;
+  gap: 32px;
+  padding: 32px 0;
+}
+
+.result-preview-page {
+  position: relative;
+  width: 1710px;
+  height: 991px;
+  overflow: hidden;
+  background: #000;
+}
+
+.result-preview-page .modal-backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
